@@ -22,7 +22,6 @@ class User
 
     public function create($name, $email, $password, $birth_date, $cpf, $rg, $phone)
     {
-        //Cadastra usuário usuário no banco
         $this->fields = array('name' => $name, 'email' => $email, 'password' => $password, 'birth_date' => $birth_date, 'cpf' => $cpf, 'rg' => $rg, 'phone' => $phone);
         $db = new Database();
         $user_id = $db->insert($this->table, $this->fields);

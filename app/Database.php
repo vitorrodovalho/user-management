@@ -8,7 +8,7 @@ class Database
 	private $pdo;
 
 	public function __construct() {
-		$this->dsn = "mysql:host=localhost;dbname=user_management2;charset=utf8";
+		$this->dsn = "mysql:host=localhost;dbname=user_management;charset=utf8";
 		$this->user = "root";
 		$this->password = "";
 		
