@@ -27,9 +27,4 @@ $('#tbl_users').DataTable({
 			"sLast": "Último"
 		}
 	},
-	"drawCallback": function () {
-		$('.dataTables_paginate > .pagination').addClass('pagination-sm');
-	}
 });
-
- $('#tbl_users').DataTable();

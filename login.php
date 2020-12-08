@@ -1,18 +1,5 @@
 <?php
-
 require 'app/Session.php';
-
-if(isset($_POST['email']) && isset($_POST['password'])){
-  $session = new Session();
-  $success = $session->login($_POST['email'], $_POST['password']);
-  if($success){
-    echo "Login efetuado com sucesso";
-    header("Location: index.php");
-  }
-  else
-    echo "Usuário ou senha inválidos.";
-}
-
 ?>
 <html lang="pt-br">
 <head>
@@ -38,7 +25,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
         <p class="login-box-msg">Faça o login para iniciar a seção</p>
         <form method="POST">
           <div class="input-group mb-3">
-            <input type="email" class="form-control form-control-sm" name="email" placeholder="Email" autofocus="" required>
+            <input type="email" class="form-control" name="email" placeholder="Email" autofocus="" required>
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-envelope"></span>
@@ -46,7 +33,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             </div>
           </div>
           <div class="input-group mb-3">
-            <input type="password" class="form-control form-control-sm" name="password" placeholder="Senha" required>
+            <input type="password" class="form-control" name="password" placeholder="Senha" required>
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-lock"></span>
@@ -55,7 +42,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
           </div>
           <!-- /.col -->
           <div class="col">
-            <button type="submit" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-sign-in-alt"></i> Login</button>
+            <button type="submit" class="btn btn-secondary btn-block"><i class="fas fa-sign-in-alt"></i> Login</button>
           </div>
           <!-- /.col -->
         </form>
@@ -78,4 +65,19 @@ if(isset($_POST['email']) && isset($_POST['password'])){
 <!-- Adicional JS -->
 <script src="public/js/script.js"></script>
 </body>
+
+<?php
+
+if(isset($_POST['email']) && isset($_POST['password'])){
+  $session = new Session();
+  $success = $session->login($_POST['email'], $_POST['password']);
+  if($success){
+    echo "<div class='alert alert-success' role='alert'>Login efetuado com sucesso!.</div>";
+    header("Location: index.php");
+  }
+  else
+    echo "<div class='alert alert-danger' role='alert'>Usuário ou senha inválidos.</div>";
+}
+?>
+
 </html>

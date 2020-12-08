@@ -1,10 +1,10 @@
 <?php
+require 'verify_session.php';
 require 'header.php';
 require 'app/User.php';
 
 $users = new User();
 $users = $users->index(array("id", "name", "birth_date", "cpf", "rg", "phone"));
-
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -32,7 +32,7 @@ $users = $users->index(array("id", "name", "birth_date", "cpf", "rg", "phone"));
 				<div class="col-12">
 					<div class="card">
 						<div class="card-header">
-							<a href="create-user.php" class="btn btn-sm btn-primary"><i class="fa fa-folder-plus"></i> Incluir</a>
+							<a href="user-form.php?action=create" class="btn btn-sm btn-primary"><i class="fa fa-folder-plus"></i> Incluir</a>
 						</div> <!-- /.card-header -->
 						<div class="card-body">
 							<div class="grid-view-overflow-x">
@@ -45,7 +45,7 @@ $users = $users->index(array("id", "name", "birth_date", "cpf", "rg", "phone"));
 											<th>CPF</th>
 											<th>RG</th>
 											<th>Telefone</th>
-											<!--<th width="15px">Ações</th>-->
+											<th>Ações</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -55,12 +55,10 @@ $users = $users->index(array("id", "name", "birth_date", "cpf", "rg", "phone"));
 											foreach ($user as $column => $value) {
 												echo "<td>{$value}</td>";
 											}
-											/*
 											echo "<td>
-											<a href='' class='btn btn-sm btn-outline-secondary'><i class='fas fa-eye'></i></a>
-											<a href='' class='btn btn-sm btn-outline-info'><i class='fas fa-edit'></i></a>
-											<button class='btn btn-sm btn-outline-danger' onclick=''><i class='fa fa-trash-alt'></i>
-											</button></td>";*/
+											<a href='user-form.php?user_id={$user['id']}&action=view' class='btn btn-sm btn-outline-secondary'><i class='fas fa-eye'></i></a>
+											<a href='user-form.php?user_id={$user['id']}&action=edit' class='btn btn-sm btn-outline-info'><i class='fas fa-edit'></i></a>
+											<a href='delete-user.php?user_id={$user['id']}' class='btn btn-sm btn-outline-danger' onClick='return confirm(\"Confirmar exclusão de usuário\")'><i class='fa fa-trash-alt'></a></td>";
 											echo "</tr>";
 										}
 										?>
@@ -75,4 +73,20 @@ $users = $users->index(array("id", "name", "birth_date", "cpf", "rg", "phone"));
 	</div><!-- /.content -->
 </div><!-- /.content-wrapper -->
 
-<?php require 'footer.php' ?>
+<?php 
+
+require 'footer.php';
+
+if(isset($_GET['message'])):
+	$message = addslashes($_GET['message']);
+	if ($message == "create"): ?>
+		<script>$( "<div class='alert alert-success' role='alert'>Usuário criado com sucesso.</div>" ).insertBefore( ".card" );</script>
+	<?php elseif($message == "edit"): ?>
+		<script>$( "<div class='alert alert-success' role='alert'>Usuário atualizado com sucesso.</div>" ).insertBefore( ".card" );</script>
+	<?php elseif($message == "delete"): ?>
+		<script>$( "<div class='alert alert-success' role='alert'>Usuário excluído com sucesso.</div>" ).insertBefore( ".card" );</script>
+	<?php endif; ?>
+	<script>window.history.pushState({}, document.title, "/user-management/" + "index.php");</script>
+<?php endif;
+
+?>

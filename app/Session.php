@@ -1,6 +1,6 @@
 <?php
 
-require 'Database.php';
+require_once 'Database.php';
 
 class Session
 {
@@ -18,6 +18,7 @@ class Session
 		$db = new Database();
 		$user = $db->verify("users", array("name","email", "password"), "email = '{$email}' AND password = '{$password}'");
 		if(!empty($user)){
+			session_start();
 			$_SESSION['name'] = $user[0]["name"];
 			$_SESSION['email'] = $user[0]["email"];
 			return true;
@@ -26,8 +27,10 @@ class Session
 		}
 	}
 
-	public function verify_session() {
-		session_start();
+	public function verifySession() {
+		if (session_status() !== PHP_SESSION_ACTIVE)
+			session_start();
+
 		if(isset($_SESSION['name'])==false) {
 			header("Location: login.php");
 			session_destroy();

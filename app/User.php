@@ -1,6 +1,7 @@
 <?php
 
-require 'Database.php';
+require_once 'Database.php';
+require_once 'Session.php';
 
 class User
 {
@@ -19,13 +20,14 @@ class User
         return $users;
     }
 
-    public function create($name, $birth_date, $cpf, $rg, $phone)
+    public function create($name, $email, $password, $birth_date, $cpf, $rg, $phone)
     {
-        $this->fields = array('name' => $name, 'birth_date' => $birth_date, 'cpf' => $cpf, 'rg' => $rg, 'phone' => $phone);
+        //Cadastra usuário usuário no banco
+        $this->fields = array('name' => $name, 'email' => $email, 'password' => $password, 'birth_date' => $birth_date, 'cpf' => $cpf, 'rg' => $rg, 'phone' => $phone);
         $db = new Database();
-        $success = $db->insert($this->table, $this->fields);
+        $user_id = $db->insert($this->table, $this->fields);
         unset($db);
-        return $success;
+        return $user_id;
     }
 
     public function show($id)
@@ -36,19 +38,19 @@ class User
         return $user;
     }
 
-    public function update($id,$name,$birth_date,$cpf,$rg,$phone)
+    public function update($id, $name, $email, $password, $birth_date, $cpf, $rg, $phone)
     {
-        $this->fields = array('id' => $id, 'name' => $name, 'birth_date' => $birth_date, 'cpf' => $cpf, 'rg' => $rg, 'phone' => $phone);
+        $this->fields = array('id' => $id, 'name' => $name, 'email' => $email, 'password' => $password, 'birth_date' => $birth_date, 'cpf' => $cpf, 'rg' => $rg, 'phone' => $phone);
         $db = new Database();
         $success = $db->update($this->table, $this->fields);
         unset($db);
         return $success;
     }
 
-    public function destroy($id)
+    public function delete($id)
     {
         $db = new Database();
-        $success = $db->delete($id);
+        $success = $db->delete($this->table, $id);
         unset($db);
         return $success;
     }

@@ -1,8 +1,8 @@
 	<!-- Main Footer -->
 	<footer class="main-footer">
-    <!-- Default to the left -->
-    <strong>User Management 2020.</strong> Todos os direitos reservados.
-  </footer>
+		<!-- Default to the left -->
+		<strong>User Management 2020.</strong> Todos os direitos reservados.
+	</footer>
 </div>
 <!-- ./wrapper -->
 

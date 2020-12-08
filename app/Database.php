@@ -8,7 +8,7 @@ class Database
 	private $pdo;
 
 	public function __construct() {
-		$this->dsn = "mysql:host=localhost;dbname=user_management;charset=utf8";
+		$this->dsn = "mysql:host=localhost;dbname=user_management2;charset=utf8";
 		$this->user = "root";
 		$this->password = "";
 		
@@ -60,11 +60,24 @@ class Database
 	}
 
 	public function insert($table, $fields) {
-		$sql = "INSERT INTO {$table} ";
-		foreach ($fields as $i => $value) {
-			$sql .= "`{$i}` = {$value}"; 	
-			var_dump($fields);
+		$sql = "INSERT INTO {$table} SET ";
+		$count = 0;
+		foreach ($fields as $column => $value) {
+			$count++;
+			if($count == count($fields))
+				$sql .= "{$column}='{$value}'"; 
+			else
+				$sql .= "{$column}='{$value}', ";	
 		}
+		$sql = $this->pdo->prepare($sql);
+		if($sql->execute())
+			return $this->pdo->lastInsertId();
+		else
+			return false;
+	}
+
+	public function show($table, $id) {
+		$sql = "SELECT * FROM {$table} WHERE id = {$id}";
 		try{
 			$sql = $this->pdo->prepare($sql);
 			$sql->execute();
@@ -75,8 +88,8 @@ class Database
 		}
 	}
 
-	public function show($table, $id) {
-		$sql = "SELECT * FROM {$table} WHERE id = {id}";
+	public function showByReference($table, $where) {
+		$sql = "SELECT * FROM {$table} WHERE {$where} ORDER BY id";
 		try{
 			$sql = $this->pdo->prepare($sql);
 			$sql->execute();
@@ -89,26 +102,40 @@ class Database
 
 	public function update($table, $fields) {
 		$sql = "UPDATE {$table} SET ";
-		try{
-			$sql = $this->pdo->prepare($sql);
-			$sql->execute();
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		$count = 0;
+		foreach ($fields as $column => $value) {
+			$count++;
+			if($column != "id"){
+				if($count == count($fields))
+					$sql .= "{$column}='{$value}'"; 
+				else
+					$sql .= "{$column}='{$value}', ";
+			} 	
 		}
-		catch(PDOException $e){
-			return $e->getMessage();
-		}
+		$sql .= " WHERE id = {$fields['id']}";
+		$sql = $this->pdo->prepare($sql);
+		if($sql->execute())
+			return true;
+		else
+			return false;
 	}
 
 	public function delete($table, $id) {
 		$sql = "DELETE FROM {$table} WHERE id = {$id}";
-		try{
-			$sql = $this->pdo->prepare($sql);
-			$sql->execute();
+		$sql = $this->pdo->prepare($sql);
+		if($sql->execute())
 			return true;
-		}
-		catch(PDOException $e){
-			return $e->getMessage();
-		}
+		else
+			return false;
+	}
+
+	public function deleteByReference($table, $where) {
+		$sql = "DELETE FROM {$table} WHERE {$where}";
+		$sql = $this->pdo->prepare($sql);
+		if($sql->execute())
+			return true;
+		else
+			return false;
 	}
 
 	public function __destruct(){
